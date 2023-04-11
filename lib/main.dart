@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'firebase_options.dart';
 import 'Dashboard.dart';
 
 void main() => runApp(MyApp());
@@ -85,14 +86,25 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+
       ),
-      body: Center(
-        child: TextButton(
+      body:FutureBuilder(
+      future: Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+
+    ),
+        builder: (
+        body: Center( child: TextButton(
           onPressed: _handleSignIn,
           child: Text('Google Sign in'),
           // color: Colors.red,
         ),
-      ),
+        ),
+        )
+
+
+
+    ),
     );
   }
 }

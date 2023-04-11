@@ -16,28 +16,32 @@ class _DashboardState extends State<Dashboard>
     with SingleTickerProviderStateMixin {
   bool isLoading = false;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-
   final databaseReference = FirebaseDatabase.instance.reference();
+
+  //DatabaseReference ref=FirebaseDatabase.instance.refFromURL('https://temperature-2f7f0-default-rtdb.asia-southeast1.firebasedatabase.app');
+  //final databaseReference = FirebaseDatabase.instance.reference();
 
   AnimationController progressController;
   Animation<double> tempAnimation;
   Animation<double> humidityAnimation;
 
   @override
-  void initState() {
-    super.initState();
 
-    databaseReference
-        .child('ESP32_Device')
-        .once()
-        .then((DataSnapshot snapshot) {
-      double temp = snapshot.value['Temperature']['Data'];
-      double humidity = snapshot.value['Humidity']['Data'];
 
-      isLoading = true;
-      _DashboardInit(temp, humidity);
-    });
-  }
+    void initState() {
+      super.initState();
+
+      databaseReference
+          .child('ESP8266_Device')
+          .once()
+          .then((DatabaseEvent event) {
+
+        double temp = double.tryParse("${event.snapshot?.value}") ?? 0.0 ;
+        double humidity = double.tryParse("${event.snapshot?.value}") ?? 0.0;
+        isLoading = true;
+        _DashboardInit(temp, humidity);
+      });
+    }
 
   _DashboardInit(double temp, double humid) {
     progressController = AnimationController(
